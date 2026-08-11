@@ -1,0 +1,487 @@
+<!-- ========================================================================= -->
+<!--                                   -->
+<!--       PART 1 -->
+<!-- ========================================================================= -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mega Pathfinding & Traffic Simulator - Deep Cyber Client</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+        
+        /* Premium Deep Cyber Oceanic Framework Layout */
+        body { display: flex; flex-direction: row; height: 100vh; width: 100vw; background: #050814; color: #f8fafc; overflow: hidden; }
+        @media (max-width: 768px) { body { flex-direction: column; overflow-y: scroll; height: auto; } }
+
+        /* Frosted Cyberpunk Dashboard Command Sidebar Panel Element */
+        #sidebar { width: 380px; min-width: 380px; background: #0b0f19; padding: 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: 10px 0 50px rgba(0, 0, 0, 0.75); z-index: 1000; overflow-y: auto; height: 100vh; border-right: 1px solid #1e293b; }
+        @media (max-width: 768px) { #sidebar { width: 100%; min-width: 100%; height: auto; } }
+        
+        h2 { font-size: 21px; font-weight: 800; color: #00f5ff; letter-spacing: -0.5px; text-shadow: 0 0 20px rgba(0, 245, 255, 0.35); line-height: 1.2; }
+        h3 { color: #94a3b8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; }
+        
+        input, select, button { padding: 12px; background: #111827; border: 1px solid #1e293b; border-radius: 10px; font-size: 13px; font-weight: 600; color: #f8fafc; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); outline: none; }
+        select:focus, input:focus { border-color: #00f5ff; box-shadow: 0 0 0 4px rgba(0, 245, 255, 0.15); background: #0b0f19; }
+        
+        button { background: #00f5ff; color: #050814; cursor: pointer; font-weight: 700; border: none; box-shadow: 0 4px 20px rgba(0, 245, 255, 0.25); letter-spacing: 0.3px; }
+        button:hover { background: #00d8ff; transform: translateY(-1.5px); box-shadow: 0 8px 30px rgba(0, 245, 255, 0.45); }
+        button:active { transform: translateY(0); }
+        
+        .stats-box { background: #111827; padding: 16px; border-radius: 10px; border-left: 4px solid #10b981; font-size: 13px; font-weight: 600; line-height: 1.65; color: #cbd5e1; border: 1px solid #1e293b; border-left-width: 4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
+        
+        /* Functional Multi-Stage Crowdsourced Telematics Tracking Widgets Layout */
+        .post-chaos-box { background: rgba(239, 68, 68, 0.08); border: 1px dashed #ef4444; border-left: 4px solid #ef4444; padding: 14px; border-radius: 10px; font-size: 12px; font-weight: 600; color: #fca5a5; display: none; line-height: 1.55; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.05); }
+        .put-success-box { background: rgba(16, 185, 129, 0.08); border: 1px dashed #10b981; border-left: 4px solid #10b981; padding: 14px; border-radius: 10px; font-size: 12px; font-weight: 600; color: #a7f3d0; display: none; line-height: 1.55; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.05); }
+        .latency-bench-box { background: rgba(0, 245, 255, 0.06); border: 1px solid #00f5ff; border-left: 4px solid #00f5ff; padding: 14px; border-radius: 10px; font-size: 13px; font-weight: 700; color: #00f5ff; font-family: monospace; letter-spacing: 0.4px; box-shadow: 0 0 15px rgba(0, 245, 255, 0.05); text-shadow: 0 0 5px rgba(0, 245, 255, 0.2); }
+
+        /* Hardware-Accelerated Floating Canvas Container Space */
+        #map-container { flex-grow: 1; position: relative; height: 100vh; background: #050814; overflow: hidden; display: flex; justify-content: center; align-items: center; padding: 24px; }
+        @media (max-width: 768px) { #map-container { height: 500px; width: 100%; flex-shrink: 0; } }
+        
+        #custom-graph-canvas { background: #090d1a; border-radius: 28px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85); transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; height: 100%; border: 1px solid #1e293b; }
+
+        /* Environment Shader Matrices */
+        .summer-mode { filter: sepia(0.35) saturate(1.35) hue-rotate(-12deg); }
+        .foggy-mode { filter: blur(4px) opacity(0.7); }
+        #offline-tag { background: #dc2626; color: #ffffff; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 800; text-align: center; display: none; box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <!-- Brand New Dynamic Heading Setup -->
+        <h2>Mega Pathfinding & Traffic Simulator</h2>
+        <h3 style="color: #00f5ff; font-size: 10px; margin-top: 4px; margin-bottom: 8px; letter-spacing: 0.5px; opacity: 0.85; text-transform: none;">Real-Time Cloud Routing Engine</h3>
+        
+        <div id="offline-tag">📴 OFFLINE FALLBACK ACTIVE</div>
+
+        <!-- Box 1 Multi-Algorithm Inputs Selection Dropdowns -->
+        <div class="input-group">
+            <h3>🗺️ Navigation Engine (Box 1)</h3>
+            <label>From Source Vector:</label>
+            <select id="from-input"></select>
+            <label>To Destination Target:</label>
+            <select id="to-input"></select>
+            <button onclick="startJourney()">Compute Route</button>
+        </div>
+
+        <!-- Box 2 Utility Categories Filters Selection Dropdowns -->
+        <div class="input-group">
+            <h3>⛽ Waypoint Filters (Box 2)</h3>
+            <select id="poi-select" onchange="findNearestPOI()">
+                <option value="">-- Choose Category Target --</option>
+                <option value="Petrol_Pump">Petrol Pump Station</option>
+                <option value="Charging_Station">EV Charging Grid Station</option>
+                <option value="Garage">Garage Service Hub</option>
+                <option value="Hospital">Medical Center Hospital</option>
+                <option value="Pharmacy">Pharmacy Point Node</option>
+            </select>
+        </div>
+
+        <!-- Chaos Engine Simulator Interface Command Triggers -->
+        <div class="input-group">
+            <h3>🌪️ Multi-Stage Cyber Chaos</h3>
+            <button id="chaos-btn" onclick="triggerSpatialChaosEngine()" style="background: #ff2a5f; color: #ffffff; box-shadow: 0 4px 20px rgba(255, 42, 95, 0.35);">Inject Network Chaos</button>
+        </div>
+
+        <!-- DYNAMIC HTTP TRANSACTION DISPLAYS VIEW MATRICES (THE THREE COMPONENT BOXES) -->
+        <div class="input-group">
+            <h3>📡 HTTP POST Anomaly Gateway</h3>
+            <div class="post-chaos-box" id="post-display-box"></div>
+        </div>
+
+        <div class="input-group">
+            <h3>🔄 HTTP PUT Mutation Gateway</h3>
+            <div class="put-success-box" id="put-display-box"></div>
+        </div>
+
+        <div class="input-group">
+            <h3>⏱️ Microsecond Latency Benchmark</h3>
+            <div class="latency-bench-box" id="latency-display-box">
+                LATENCY STACK: -- μs<br>PROCESSING FRAME: Idle Matrix
+            </div>
+        </div>
+
+        <!-- Climate Overrides Physics Select Options -->
+        <div class="input-group">
+            <h3>🌦️ Environment Overrides Engine</h3>
+            <select id="weather-select" onchange="updateWeatherSystem(this.value)">
+                <option value="normal">Clear Sky (Live Weather API)</option>
+                <option value="summer">Summer Season Heat Matrix Mode</option>
+                <option value="rainy">Rainy Season Physics Mode</option>
+                <option value="foggy">Foggy Visibility Shaders Mode</option>
+            </select>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: none; font-weight: 600; color: #94a3b8; font-size: 10px;"><input type="checkbox" id="network-toggle" onchange="toggleNetwork()"> Simulate Network Timeout Interceptor</label>
+        </div>
+
+        <!-- Powertrain Diagnostic Summaries -->
+        <div class="input-group">
+            <h3>📊 Powertrain Telematics Analytics</h3>
+            <div class="stats-box" id="metrics-box">
+                Estimated Navigation Time: --<br>
+                Integrated Fuel Economy: --<br>
+                Optimal Boundary Speed Bounds: --
+            </div>
+        </div>
+    </div>
+
+    <div id="map-container">
+        <canvas id="custom-graph-canvas"></canvas>
+    </div>
+
+// ========================================================================= //
+//                                         //
+//                       //
+// ========================================================================= //
+    <script>
+        const canvas = document.getElementById('custom-graph-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Adjacency Graph Nodes Matrix Geometry Coordinates Mapping Specs Links
+        const graphNodes = {
+            'Driver_Spot': { x: 90, y: 260, label: 'Driver Spot' },
+            'Hotel': { x: 240, y: 180, label: 'Hotel' },
+            'Petrol_Pump': { x: 260, y: 390, label: 'Petrol Pump' },
+            'Hospital': { x: 410, y: 110, label: 'Hospital' },
+            'Garage': { x: 120, y: 470, label: 'Garage' },
+            'Charging_Station': { x: 450, y: 240, label: 'Charging Station' },
+            'Airport': { x: 100, y: 70, label: 'Airport' },
+            'Tech_Park': { x: 620, y: 200, label: 'Tech Park' },
+            'Shopping_Mall': { x: 510, y: 350, label: 'Shopping Mall' },
+            'Bus_Station': { x: 420, y: 470, label: 'Bus Station' },
+            'Railway_Station': { x: 620, y: 470, label: 'Railway Station' },
+            'Pharmacy': { x: 260, y: 70, label: 'Pharmacy' },
+            'Police_Station': { x: 470, y: 560, label: 'Police Station' },
+            'Movie_Theater': { x: 680, y: 350, label: 'Movie Theater' },
+            'Central_Park': { x: 780, y: 260, label: 'Central Park' },
+            'Residential_Hub': { x: 760, y: 110, label: 'Residential Hub' },
+            'University_Campus': { x: 900, y: 370, label: 'University Campus' },
+            'Destination': { x: 280, y: 560, label: 'Destination' },
+            'Highway_Exit_1': { x: 320, y: 240, label: 'Highway Exit 1' },
+            'Market_Yard': { x: 530, y: 560, label: 'Market Yard' },
+            'City_Library': { x: 170, y: 50, label: 'City Library' },
+            'Fire_Station': { x: 620, y: 560, label: 'Fire Station' },
+            'Highway_Exit_2': { x: 900, y: 90, label: 'Highway Exit 2' }
+        };
+
+        const staticEdges = [
+            { from: 'Driver_Spot', to: 'Hotel', weight: 3 }, { from: 'Driver_Spot', to: 'Petrol_Pump', weight: 4 }, { from: 'Driver_Spot', to: 'Airport', weight: 12 },
+            { from: 'Hotel', to: 'Hospital', weight: 5 }, { from: 'Hotel', to: 'Shopping_Mall', weight: 2 }, { from: 'Hotel', to: 'Charging_Station', weight: 4 },
+            { from: 'Petrol_Pump', to: 'Garage', weight: 2 }, { from: 'Petrol_Pump', to: 'Bus_Station', weight: 6 }, { from: 'Hospital', to: 'Destination', weight: 8 },
+            { from: 'Hospital', to: 'Pharmacy', weight: 1 }, { from: 'Garage', to: 'Destination', weight: 7 }, { from: 'Garage', to: 'Railway_Station', weight: 9 },
+            { from: 'Charging_Station', to: 'Highway_Exit_1', weight: 5 }, { from: 'Airport', to: 'Tech_Park', weight: 6 }, { from: 'Airport', to: 'Highway_Exit_1', weight: 8 },
+            { from: 'Tech_Park', to: 'Shopping_Mall', weight: 4 }, { from: 'Tech_Park', to: 'Residential_Hub', weight: 5 }, { from: 'Shopping_Mall', to: 'Movie_Theater', weight: 2 },
+            { from: 'Bus_Station', to: 'Railway_Station', weight: 3 }, { from: 'Bus_Station', to: 'Market_Yard', weight: 4 }, { from: 'Railway_Station', to: 'Police_Station', weight: 5 },
+            { from: 'Pharmacy', to: 'Police_Station', weight: 4 }, { from: 'Pharmacy', to: 'City_Library', weight: 3 }, { from: 'Police_Station', to: 'Destination', weight: 4 },
+            { from: 'Police_Station', to: 'Fire_Station', weight: 2 }, { from: 'Movie_Theater', to: 'Central_Park', weight: 3 }, { from: 'Central_Park', to: 'Residential_Hub', weight: 4 },
+            { from: 'Central_Park', to: 'University_Campus', weight: 5 }, { from: 'Residential_Hub', to: 'Highway_Exit_2', weight: 6 }
+        ];
+
+        let activePath = []; let highlightedPOI = null; let weatherMode = 'normal'; let liveHazardsCache = {};
+        let vehicleIcon = { currentNodeIndex: 0, currentX: 0, currentY: 0, isMoving: false };
+        
+        let chaosStage = 0; 
+        const chaosReasons = ["Critical Accident", "Protest March", "Road Construction Work", "Gridlock Congestion", "Heavy Waterlogging"];
+
+        function populateNodeSelectors() {
+            const fromSelect = document.getElementById('from-input');
+            const toSelect = document.getElementById('to-input');
+            fromSelect.innerHTML = ""; toSelect.innerHTML = "";
+            Object.keys(graphNodes).sort().forEach(key => {
+                let opt1 = document.createElement('option'); opt1.value = key; opt1.innerText = graphNodes[key].label; fromSelect.appendChild(opt1);
+                let opt2 = document.createElement('option'); opt2.value = key; opt2.innerText = graphNodes[key].label; toSelect.appendChild(opt2);
+            });
+            fromSelect.value = "Airport"; toSelect.value = "Tech_Park";
+        }
+
+        function initCanvasDimensions() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            renderCustomMapGraph();
+        }
+// ========================================================================= //
+//                                                //
+//    PART 3              //
+// ========================================================================= //
+        // Advanced Cyber-Oceanic Vector Shaders Graphics Pipeline
+        function renderCustomMapGraph() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 1. Draw static grid network connection paths wires loops (Dark Steel Pipelines)
+            staticEdges.forEach(edge => {
+                const startNode = graphNodes[edge.from]; const endNode = graphNodes[edge.to];
+                if(!startNode || !endNode) return;
+                ctx.beginPath(); ctx.moveTo(startNode.x, startNode.y); ctx.lineTo(endNode.x, endNode.y);
+                ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 2.5; ctx.stroke(); 
+                
+                ctx.fillStyle = '#64748b'; ctx.font = '600 10px Segoe UI';
+                ctx.fillText(`${edge.weight} km`, (startNode.x + endNode.x)/2 + 6, (startNode.y + endNode.y)/2 - 4);
+            });
+
+            // 2. Draw active trajectory calculated optimal route vector (Laser Electric Cyan Trace Overlay)
+            if (activePath.length > 0) {
+                ctx.beginPath();
+                for (let i = 0; i < activePath.length; i++) {
+                    const node = graphNodes[activePath[i]]; if(!node) continue;
+                    if (i === 0) ctx.moveTo(node.x, node.y); else ctx.lineTo(node.x, node.y);
+                }
+                ctx.strokeStyle = '#00f5ff'; ctx.lineWidth = 5.5; ctx.stroke(); // Hyper Neon Electric Cyan Glow
+            }
+
+            // 3. Draw static nodes points markers layers bubbles array bounds
+            Object.keys(graphNodes).forEach(key => {
+                const node = graphNodes[key]; ctx.beginPath(); ctx.arc(node.x, node.y, 9, 0, 2 * Math.PI);
+                
+                if (liveHazardsCache && liveHazardsCache[key]) {
+                    ctx.fillStyle = '#ff2a5f'; ctx.fill(); // Neon Crimson Red Blocked Casing Layer Base
+                    ctx.beginPath(); ctx.arc(node.x, node.y, 18, 0, 2 * Math.PI);
+                    ctx.strokeStyle = 'rgba(255, 42, 95, 0.45)'; ctx.lineWidth = 2; ctx.stroke(); // Pulsing radiation shell rings pointer
+                } else if (key === highlightedPOI) {
+                    ctx.fillStyle = '#f59e0b'; ctx.fill(); 
+                } else if (activePath.includes(key)) {
+                    ctx.fillStyle = '#0e7490'; ctx.fill(); 
+                } else {
+                    ctx.fillStyle = '#10b981'; ctx.fill(); 
+                }
+                
+                ctx.strokeStyle = '#050814'; ctx.lineWidth = 2.5; ctx.stroke(); 
+                ctx.fillStyle = '#e2e8f0'; ctx.font = 'bold 11px Segoe UI';
+                ctx.fillText(node.label, node.x - 22, node.y - 14);
+            });
+
+            // 4. Interpolate and draw the floating Polished Cyber Sapphire Navigation Icon
+            if (vehicleIcon.isMoving) {
+                ctx.beginPath(); ctx.arc(vehicleIcon.currentX, vehicleIcon.currentY, 13, 0, 2 * Math.PI);
+                ctx.fillStyle = '#00f5ff'; ctx.fill(); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2.5; ctx.stroke(); 
+                ctx.beginPath(); ctx.arc(vehicleIcon.currentX, vehicleIcon.currentY, 4, 0, 2 * Math.PI); ctx.fillStyle = '#050814'; ctx.fill();
+            }
+
+            // 5. Canvas Rain Engine physics particle loops rendering overrides specs configurations
+            if (weatherMode === 'rainy') {
+                ctx.strokeStyle = 'rgba(0, 245, 255, 0.25)'; ctx.lineWidth = 1.2;
+                for(let i=0; i<45; i++) {
+                    let x = Math.random() * canvas.width; let y = Math.random() * canvas.height;
+                    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + 15); ctx.stroke();
+                }
+            }
+        }
+
+        function dispatchVoiceSynthesis(message) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const vocalCore = new SpeechSynthesisUtterance(message);
+                vocalCore.lang = 'en-US'; vocalCore.rate = 1.0; window.speechSynthesis.speak(vocalCore);
+            }
+        }
+// ========================================================================= //
+//                                   //
+//              PART 4              //
+// ========================================================================= //
+        
+        // THREE-STAGE CYBER CHAOS INJECTOR CODE ARCHITECTURE WITH LIST REPORT MAPPING
+        async function triggerSpatialChaosEngine() {
+            const chaosButton = document.getElementById('chaos-btn');
+            const postBox = document.getElementById('post-display-box');
+            const putBox = document.getElementById('put-display-box');
+            const src = document.getElementById('from-input').value;
+            const dest = document.getElementById('to-input').value;
+
+            if (chaosStage === 0) {
+                // STAGE 1 [POST]: Inject 3 Random Anomalies
+                liveHazardsCache = {};
+                const allNodeKeys = Object.keys(graphNodes);
+                let shuffledReasons = [...chaosReasons].sort(() => 0.5 - Math.random());
+                
+                let injectedCount = 0;
+                while (injectedCount < 3) {
+                    const randomNodeKey = allNodeKeys[Math.floor(Math.random() * allNodeKeys.length)];
+                    if (randomNodeKey !== src && randomNodeKey !== dest && !liveHazardsCache[randomNodeKey]) {
+                        liveHazardsCache[randomNodeKey] = shuffledReasons[injectedCount];
+                        injectedCount++;
+                    }
+                }
+                chaosStage = 1;
+                chaosButton.style.background = "#d97706"; // Warning Amber Look
+                chaosButton.innerText = "Increase Chaos Load";
+                
+                // Construct POST List Form inside the dedicated block element
+                let postHTML = `<b>[HTTP POST 201] STAGE 1 ACTIVE</b><br><span style='color:#f87171;'>⚠️ DETECTED INFRASTRUCTURE BARRIERS:</span><ul style='padding-left:15px; margin-top:5px;'>`;
+                Object.keys(liveHazardsCache).forEach(k => { postHTML += `<li><b>${graphNodes[k].label}</b>: ${liveHazardsCache[k]}</li>`; });
+                postHTML += `</ul>`;
+                
+                postBox.innerHTML = postHTML; postBox.style.display = "block";
+                putBox.style.display = "none";
+                
+                dispatchVoiceSynthesis("Network alert. Three critical constraints injected on the graph.");
+                renderCustomMapGraph();
+                if (vehicleIcon.isMoving) rerouteJourneyOnTheFly(activePath[vehicleIcon.currentNodeIndex], dest); else startJourney();
+
+            } else if (chaosStage === 1) {
+                // STAGE 2 [POST]: Forcefully Inject 2 MORE Failures (Total 5)
+                const allNodeKeys = Object.keys(graphNodes);
+                let currentBlockedCount = Object.keys(liveHazardsCache).length;
+                let shuffledReasons = [...chaosReasons].sort(() => 0.5 - Math.random());
+                
+                while (currentBlockedCount < 5) {
+                    const randomNodeKey = allNodeKeys[Math.floor(Math.random() * allNodeKeys.length)];
+                    if (randomNodeKey !== src && randomNodeKey !== dest && !liveHazardsCache[randomNodeKey]) {
+                        liveHazardsCache[randomNodeKey] = shuffledReasons[currentBlockedCount % chaosReasons.length];
+                        currentBlockedCount++;
+                    }
+                }
+                chaosStage = 2;
+                chaosButton.style.background = "#dc2626"; // Crimson Red Core Block Look
+                chaosButton.innerText = "Clear Grid Anomalies";
+                
+                let postHTML = `<b>[HTTP POST 201] STAGE 2 DANGER</b><br><span style='color:#f87171;'>🚨 ALL 5 TRAFFIC SEGMENTS COLLAPSED:</span><ul style='padding-left:15px; margin-top:5px;'>`;
+                Object.keys(liveHazardsCache).forEach(k => { postHTML += `<li><b>${graphNodes[k].label}</b>: ${liveHazardsCache[k]}</li>`; });
+                postHTML += `</ul>`;
+                
+                postBox.innerHTML = postHTML; renderCustomMapGraph();
+                dispatchVoiceSynthesis("Extreme hazard load. Additional roads collapsed. Triggering real-time micro-rerouting loops.");
+                if (vehicleIcon.isMoving) rerouteJourneyOnTheFly(activePath[vehicleIcon.currentNodeIndex], dest); else startJourney();
+
+            } else {
+                // STAGE 3 [PUT]: Clear all anomalies and update PUT gateway block
+                let putHTML = `<b>[HTTP PUT 200 OK] RESTORATION</b><br><span style='color:#34d399;'>✅ INFRASTRUCTURE NETWORK CLEARED:</span><ul style='padding-left:15px; margin-top:5px;'>`;
+                Object.keys(liveHazardsCache).forEach(k => { putHTML += `<li>Problem solved at <b>${graphNodes[k].label}</b> ✔️</li>`; });
+                putHTML += `</ul><span style='color:#6ee7b7; font-size:11px;'>All conflict segments have returned to normal bounds.</span>`;
+                
+                liveHazardsCache = {};
+                chaosStage = 0;
+                chaosButton.style.background = "#10b981"; // Safe Green Look
+                chaosButton.innerText = "Inject Network Chaos";
+                
+                postBox.style.display = "none";
+                putBox.innerHTML = putHTML; putBox.style.display = "block";
+                
+                dispatchVoiceSynthesis("Grid recovery successful. Path network completely restored.");
+                renderCustomMapGraph();
+                if (vehicleIcon.isMoving) rerouteJourneyOnTheFly(activePath[vehicleIcon.currentNodeIndex], dest); else startJourney();
+                
+                setTimeout(() => { chaosButton.style.background = "#ff2a5f"; }, 3000);
+            }
+        }
+
+        async function rerouteJourneyOnTheFly(currentLocation, finalDestination) {
+            const blockedParams = Object.keys(liveHazardsCache).map(k => `${k}:${liveHazardsCache[k]}`).join(",");
+            try {
+                let response = await fetch(`http://127.0.0{currentLocation}&end=${finalDestination}&blocked=${blockedParams}`);
+                let data = await response.json();
+                if(data.status === "success" && data.path.length > 0) {
+                    activePath = data.path; vehicleIcon.currentNodeIndex = 0; startStepAnimation();
+                }
+            } catch (e) { console.log("Bypass pipeline intercept."); }
+        }
+// ========================================================================= //
+//                           BLACK BOX BOUNDARY                              //
+//              PREMIUM ROYAL AERO-LIGHT SYSTEM CLIENT - PART 5              //
+// ========================================================================= //
+        async function startJourney() {
+            if (movementTimer) clearInterval(movementTimer);
+            const src = document.getElementById('from-input').value;
+            const dest = document.getElementById('to-input').value;
+            if(src === dest) { alert("Source and Destination nodes cannot match."); return; }
+
+            // High-Resolution Benchmark initialization wrapper
+            const benchmarkingStart = performance.now();
+            const blockedParams = Object.keys(liveHazardsCache).map(k => `${k}:${liveHazardsCache[k]}`).join(",");
+
+            try {
+                let response = await fetch(`http://127.0.0{src}&end=${dest}&blocked=${blockedParams}`);
+                let data = await response.json();
+
+                if(data.status === "success" && data.path.length > 0) {
+                    const benchmarkingEnd = performance.now();
+                    const totalExecutionTimeUs = ((benchmarkingEnd - benchmarkingStart) * 1000).toFixed(2);
+                    
+                    // Direct End-to-End Latency mapping into digital meter box element natively
+                    document.getElementById('latency-display-box').innerHTML = `LATENCY STACK: ${totalExecutionTimeUs} μs<br>PROCESSING FRAME: ${data.algorithm_deployed.split(" ")} Loaded`;
+                    
+                    activePath = data.path; updateWeatherSystem(data.live_weather); renderCustomMapGraph();
+                    
+                    vehicleIcon.currentNodeIndex = 0;
+                    const startPositionNode = graphNodes[src];
+                    vehicleIcon.currentX = startPositionNode.x; vehicleIcon.currentY = startPositionNode.y;
+                    vehicleIcon.isMoving = true;
+                    startStepAnimation();
+                } else {
+                    alert("❌ Target node isolated by current cyber chaos blocks configuration!");
+                }
+            } catch (error) {
+                document.getElementById('latency-display-box').innerHTML = `LATENCY STACK: Local Fallback<br>PROCESSING FRAME: Sandbox Mode`;
+                activePath = [src, "Hotel", "Shopping_Mall", dest]; liveHazardsCache = {};
+                vehicleIcon.currentNodeIndex = 0;
+                const startPositionNode = graphNodes[src];
+                vehicleIcon.currentX = startPositionNode.x; vehicleIcon.currentY = startPositionNode.y;
+                vehicleIcon.isMoving = true; startStepAnimation();
+            }
+        }
+
+        function updateWeatherSystem(mode) {
+            const canvasEl = document.getElementById('custom-graph-canvas');
+            const metricsPanel = document.getElementById('metrics-box');
+            weatherMode = mode; canvasEl.className = '';
+            if (mode === 'summer') {
+                canvasEl.classList.add('summer-mode');
+                metricsPanel.innerHTML = `Estimated Navigation Time: 22 Mins<br>Integrated Fuel Economy: 1.4L<br>Optimal Boundary Speed Bounds: 45 km/hr`;
+            } else if (mode === 'rainy') {
+                metricsPanel.innerHTML = `Estimated Navigation Time: 40 Mins<br>Integrated Fuel Economy: 2.2L<br>Recommended Safety Speed: 30 km/hr`;
+            } else if (mode === 'foggy') {
+                canvasEl.classList.add('foggy-mode');
+                metricsPanel.innerHTML = `Estimated Navigation Time: 48 Mins<br>Integrated Fuel Economy: 1.9L<br>Recommended Safety Speed: 20 km/hr`;
+            } else {
+                metricsPanel.innerHTML = `Estimated Navigation Time: 15 Mins<br>Integrated Fuel Economy: 1.1L<br>Recommended Target Speed: 60 km/hr`;
+            }
+        }
+
+        let movementTimer = null;
+        function startStepAnimation() {
+            if (movementTimer) clearInterval(movementTimer);
+            if (vehicleIcon.currentNodeIndex >= activePath.length - 1) {
+                vehicleIcon.isMoving = false; renderCustomMapGraph();
+                dispatchVoiceSynthesis("Arrived at target location."); return;
+            }
+            const startNode = graphNodes[activePath[vehicleIcon.currentNodeIndex]];
+            const endNode = graphNodes[activePath[vehicleIcon.currentNodeIndex + 1]];
+            if (!startNode || !endNode) return;
+            let totalSteps = 30; let stepCounter = 0;
+            movementTimer = setInterval(() => {
+                if (stepCounter <= totalSteps) {
+                    vehicleIcon.currentX = startNode.x + (endNode.x - startNode.x) * (stepCounter / totalSteps);
+                    vehicleIcon.currentY = startNode.y + (endNode.y - startNode.y) * (stepCounter / totalSteps);
+                    stepCounter++; renderCustomMapGraph();
+                } else {
+                    clearInterval(movementTimer); vehicleIcon.currentNodeIndex++; startStepAnimation();
+                }
+            }, 400); 
+        }
+
+        function findNearestPOI() {
+            const selectedPOI = document.getElementById('poi-select').value;
+            if(!selectedPOI) { highlightedPOI = null; renderCustomMapGraph(); return; }
+            highlightedPOI = selectedPOI; renderCustomMapGraph();
+            dispatchVoiceSynthesis("Closest cluster node successfully highlighted.");
+        }
+
+        function toggleNetwork() {
+            const isDisconnected = document.getElementById('network-toggle').checked;
+            document.getElementById('offline-tag').style.display = isDisconnected ? 'block' : 'none';
+            if(isDisconnected) dispatchVoiceSynthesis("Network connectivity drop detected.");
+        }
+
+        window.addEventListener('resize', () => { canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight; renderCustomMapGraph(); });
+        window.addEventListener('load', () => { populateNodeSelectors(); canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight; renderCustomMapGraph(); });
+        setInterval(renderCustomMapGraph, 120);
+    </script>
+</body>
+</html>
+<!-- ========================================================================= -->
+<!--                           BLACK BOX END                                   -->
+<!-- ========================================================================= -->
+
+
